@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Station Météo</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-background-image="img/slide1.jpg" data-background-opacity="0.65">
+					<h3>Une station météo maison est-elle fiable?</h3>
+				</section>
+				<section data-background-image="img/slide2.jpg" data-background-opacity="0.65">
+					<h3>Sommaire</h3>
+					<br>
+					<ul>
+						<li class="fragment">Comment fonctionnent les stations météo ?</li>
+						<li class="fragment">Comment faire une station météo maison ?</li>
+						<li class="fragment">Comparaison avec Météo France</li>
+						<li class="fragment">Rapport qualité/prix</li>
+					</ul>
+				</section>
+				<section data-background-image="img/slide3.jpg" data-background-opacity="0.65">
+					<h3>Comment fonctionnent les stations météo ?</h3>
+				</section>
+				<section data-background-image="img/slide4.png" data-background-opacity="0.65">
+					<h3 class="fragment fade-out nopacity">Comment faire une station météo maison ?</h3>
+				</section>
+				<section>
+					<pre><code data-trim data-line-numbers="1-39|1-2|4-17|5-6|8-11|13-16|19-39|20-22|24-26,28-30,32-34|36|38|1-39">
+					#include &ltArduino_HTS221.h&gt
+					#include &ltArduino_LPS22HB.h&gt
+					
+					void setup() {
+						Serial.begin(9600);
+						while (!Serial);
+					
+						if (!HTS.begin()) {
+							Serial.println("HTS sensor error");
+							while (1);
+						}
+					
+						if (!BARO.begin()) {
+							Serial.println("LPS sensor error");
+							while (1);
+						}
+					}
+					
+					void loop() {
+					  	float temperature = HTS.readTemperature() -7;
+					  	float humidity = HTS.readHumidity();
+					  	float pressure = (BARO.readPressure() +1.6) *10;
+						
+					  	Serial.print("Temperature = ");
+					  	Serial.print(temperature);
+					  	Serial.println(" °C");
+						
+					  	Serial.print("Humidity    = ");
+					  	Serial.print(humidity);
+					  	Serial.println(" %");
+						
+					  	Serial.print("Pressure    = ");
+					  	Serial.print(pressure);
+					  	Serial.println(" hPa");
+						
+					  	Serial.println();
+						
+					  	delay(1000);
+					}
+					</code></pre>
+				</section>
+				<section data-background-image="img/slide5.jpg" data-background-opacity="0.65">
+					<h3>Comparaison avec Météo France</h3>
+				</section>
+				<section>
+					<h3>Rapport qualité/prix</h3>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+
+			Reveal.configure({
+			  keyboard: {
+			    13: 'next', // go to the next slide when the ENTER key is pressed
+			  }
+			});
+
+			Reveal.addEventListener('fragmentshown', function(e) {
+    			if (e.fragment.className.indexOf('nopacity') > -1) {
+					console.log("Shown")
+        			Reveal.getCurrentSlide().dataset.backgroundOpacity = '1';
+        			Reveal.sync();
+    			}
+			}, false);
+
+			Reveal.addEventListener('fragmenthidden', function(e) {
+    			if (e.fragment.className.indexOf('nopacity') > -1) {
+					console.log("Hidden")
+        			Reveal.getCurrentSlide().dataset.backgroundOpacity = '0.65';
+        			Reveal.sync();
+    			}
+			}, false);
+		</script>
+	</body>
+</html>
