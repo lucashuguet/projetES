@@ -59,7 +59,7 @@
 					void loop() {
 					  	float temperature = HTS.readTemperature() -7;
 					  	float humidity = HTS.readHumidity();
-					  	float pressure = (BARO.readPressure() +1.6) *10;
+					  	float pressure = BARO.readPressure() *10;
 						
 					  	Serial.print("Temperature = ");
 					  	Serial.print(temperature);
@@ -75,7 +75,7 @@
 						
 					  	Serial.println();
 						
-					  	delay(1000);
+					  	delay(60000);
 					}
 					</code></pre>
 				</section>
